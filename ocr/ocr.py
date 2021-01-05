@@ -39,19 +39,6 @@ downsample_factor = 4
 # Maximum length of any captcha in the dataset
 max_length = max([len(label) for label in labels])
 
-# Desired image dimensions
-img_width = 200
-img_height = 50
-
-# Factor by which the image is going to be downsampled by the convolutional blocks.
-# We will be using two convolution blocks and each block will have a pooling layer
-# which downsample the features by a factor of 2.
-# Hence total downsampling factor would be 4.
-downsample_factor = 4
-
-# Maximum length of any captcha in the dataset
-max_length = max([len(label) for label in labels])
-
 # Mapping characters to integers
 char_to_num = layers.experimental.preprocessing.StringLookup(
     vocabulary=list(characters), num_oov_indices=0, mask_token=None
