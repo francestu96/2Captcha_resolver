@@ -11,12 +11,12 @@ from tensorflow import keras
 from tensorflow.keras import layers
     
 # Path to the data directory
-data_dir = Path("./captcha_images/")
+data_dir = Path("./ocr/captcha_images/")
 
 # Get list of all the images
 images = sorted(list(map(str, list(data_dir.glob("*.png")))))
 labels = [img.split(os.path.sep)[-1].split(".png")[0] for img in images]
-characters = set(char for label in labels for char in label)
+characters = [x for x in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789']
 
 print(f"Number of images found: {len(images)}")
 print(f"Number of labels found: {len(labels)}")
