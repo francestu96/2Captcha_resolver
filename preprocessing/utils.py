@@ -1,5 +1,15 @@
 from cv2 import cv2
+import numpy as np
 import matplotlib.pyplot as plt
+
+def get_random_images(images_path, n=5):
+    image_collection = []
+    
+    for i in np.random.permutation(len(images_path))[:n]:
+        image = cv2.imread(images_path[i])
+        image_collection.append(image)
+        
+    return image_collection
 
 def plot_histogram(image, colorspace):
     chans = cv2.split(image)
