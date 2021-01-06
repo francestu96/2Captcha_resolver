@@ -6,7 +6,7 @@ from claptcha import Claptcha
 
 WIDTH = 250
 HEIGHT = 80
-IMAGES_PER_TEXT_LENGTH = 200
+IMAGES_PER_TEXT_LENGTH = 50
 OUTPUT_DIR = ".\\captcha_images\\"
 FONTS = glob("C:\\Windows\\fonts\\*.ttf")
 CHARACTERS = [x for x in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789']
