@@ -1,5 +1,5 @@
 import os
-from utils.utils import split_data, encode_single_sample, build_model, decode_batch_predictions
+from utils.utils import split_data, encode_single_sample, build_model, decode_single_prediction, decode_batch_predictions
 import matplotlib.pyplot as plt
 
 import numpy as np
@@ -11,34 +11,27 @@ from tensorflow import keras
 from tensorflow.keras import layers
 
 # Path to the data directory
-data_dir = Path("./captcha_images/")
+data_dir = Path("./samples/")
 # Path to the model directory
 model_dir = Path("./model/")
 
 # Get list of all the images
-images = list(map(str, list(data_dir.glob("*.png"))))
-labels = [img.split(os.path.sep)[-1].split(".png")[0] for img in images]
+images = list(map(str, list(data_dir.glob("*.jpg"))))
+labels = [img.split(os.path.sep)[-1].split(".jpg")[0] for img in images]
 characters = [x for x in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789']
 
 # Batch size for training and validation
-batch_size = 24
+batch_size = 16
 
 # Desired image dimensions
 img_width = 250
 img_height = 80
 
-# Maximum length of any captcha in the dataset
-max_length = max([len(label) for label in labels])
-
 # Mapping characters to integers
-char_to_num = layers.experimental.preprocessing.StringLookup(
-    vocabulary=list(characters), num_oov_indices=0, mask_token=None
-)
+char_to_num = layers.experimental.preprocessing.StringLookup(vocabulary=list(characters), num_oov_indices=0, mask_token=None)
 
 # Mapping integers back to original characters
-num_to_char = layers.experimental.preprocessing.StringLookup(
-    vocabulary=char_to_num.get_vocabulary(), mask_token=None, invert=True
-)
+num_to_char = layers.experimental.preprocessing.StringLookup(vocabulary=char_to_num.get_vocabulary(), mask_token=None, invert=True)
 
 
 # Splitting data into training and validation sets
@@ -68,13 +61,11 @@ except OSError:
     # Get the model
     model = build_model(img_width, img_height, characters)
 
-    epochs = 200
+    epochs = 100
     early_stopping_patience = 10
 
     # Add early stopping
-    early_stopping = keras.callbacks.EarlyStopping(
-        monitor="val_loss", patience=early_stopping_patience, restore_best_weights=True
-    )
+    early_stopping = keras.callbacks.EarlyStopping(monitor="val_loss", patience=early_stopping_patience, restore_best_weights=True)
 
     # Train the model
     history = model.fit(
@@ -91,26 +82,9 @@ except OSError:
 
     prediction_model.save(model_dir)
 
-# Let's check results on some validation samples
-# for batch in validation_dataset.take(1):
-#     batch_images = batch["image"]
-#     batch_labels = batch["label"]
-    
-#     preds = prediction_model.predict(batch_images)
-#     pred_texts = decode_batch_predictions(preds, max_length, num_to_char)
-    
-#     orig_texts = []
-#     for label in batch_labels:
-#         label = tf.strings.reduce_join(num_to_char(label)).numpy().decode("utf-8")
-#         orig_texts.append(label)
-        
-#     _, ax = plt.subplots(4, 4, figsize=(15, 5))
-#     for i in range(len(pred_texts)):
-#         img = (batch_images[i, :, :, 0] * 255).numpy().astype(np.uint8)
-#         img = img.T
-#         title = f"Prediction: {pred_texts[i]}"
-#         ax[i // 4, i % 4].imshow(img, cmap="gray")
-#         ax[i // 4, i % 4].set_title(title)
-#         ax[i // 4, i % 4].axis("off")        
 
-# plt.show()
+for image in images[0:10]:
+    test = np.reshape(encode_single_sample(image, "unkown", img_height, img_width, char_to_num)["image"], (1, img_width, img_height, 1))
+    pred = prediction_model.predict(test)
+    pred_texts, acc = decode_single_prediction(pred, num_to_char)
+    print(image + " prediction: " + pred_texts + " acc: " + str(acc))

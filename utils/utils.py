@@ -1,4 +1,5 @@
 from utils.ctcLayer import CTCLayer
+import itertools as iter
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
@@ -40,9 +41,7 @@ def build_model(img_width, img_height, characters):
     output = CTCLayer(name="ctc_loss")(labels, x)
     
     # Define the model 
-    model = keras.models.Model(
-        inputs=[input_img, labels], outputs=output, name="ocr_model_v1"
-    )
+    model = keras.models.Model(inputs=[input_img, labels], outputs=output, name="ocr_model_v1")
     # Optimizer
     opt = keras.optimizers.Adam()
     # Compile the model and return
@@ -91,6 +90,19 @@ def decode_batch_predictions(pred, max_length, num_to_char):
         res = tf.strings.reduce_join(num_to_char(res)).numpy().decode("utf-8")
         output_text.append(res)
     return output_text
+
+def decode_single_prediction(pred, num_to_char):
+    input_len = np.ones(pred.shape[0]) * pred.shape[1]
+    # Use greedy search. For complex tasks, you can use beam search
+
+    # decoded = keras.backend.ctc_decode(pred, input_length=input_len, greedy=True)
+    # accuracy = float(decoded[1][0][0])
+    # result = decoded[0][0][:,: np.argmax(decoded[0][0] == -1)]
+    # output_text = tf.strings.reduce_join(num_to_char(result)).numpy().decode("utf-8")
+    # return (output_text, accuracy)
+    res, acc = keras.backend.ctc_decode(pred, input_length=input_len, greedy=True)
+    output_text = tf.strings.reduce_join(num_to_char(res[0][:,: np.argmax(res[0] == -1)])).numpy().decode("utf-8")
+    return (output_text, float(acc[0][0]))
 
 def random_text(characters, len):
     rndLetters = (random.choice(characters) for _ in range(len))

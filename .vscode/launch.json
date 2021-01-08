@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Captcha Rename",
+            "type": "python",
+            "request": "launch",
+            "program": "captcha_rename.py",
+            "console": "integratedTerminal",
+            "args": ["test"]
+        },
+        {
+            "name": "Captcha Generator",
+            "type": "python",
+            "request": "launch",
+            "program": "captcha_generator.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Png to Jpg",
+            "type": "python",
+            "request": "launch",
+            "program": "png_to_jpg.py",
+            "console": "integratedTerminal",
+            "args": ["captcha_images"]
+        }
+    ]
+}
