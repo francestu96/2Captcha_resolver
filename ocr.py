@@ -82,9 +82,9 @@ except OSError:
 
     prediction_model.save(model_dir)
 
-
-for image in images[0:10]:
+#test
+for image in images[30:40]:
     test = np.reshape(encode_single_sample(image, "unkown", img_height, img_width, char_to_num)["image"], (1, img_width, img_height, 1))
     pred = prediction_model.predict(test)
     pred_texts, acc = decode_single_prediction(pred, num_to_char)
-    print(image + " prediction: " + pred_texts + " acc: " + str(acc))
+    print(image + " prediction: " + pred_texts + " log_prob: " + str(-acc) + " acc: " + str(np.exp(-acc)))

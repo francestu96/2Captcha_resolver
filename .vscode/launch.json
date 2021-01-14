@@ -5,27 +5,34 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Captcha Rename",
+            "name": "OCR",
             "type": "python",
             "request": "launch",
-            "program": "captcha_rename.py",
-            "console": "integratedTerminal",
-            "args": ["test"]
-        },
-        {
-            "name": "Captcha Generator",
-            "type": "python",
-            "request": "launch",
-            "program": "captcha_generator.py",
+            "program": "ocr.py",
             "console": "integratedTerminal"
         },
         {
-            "name": "Png to Jpg",
+            "name": "Ocr Service",
             "type": "python",
             "request": "launch",
-            "program": "png_to_jpg.py",
+            "program": "ocr_service.py",
             "console": "integratedTerminal",
-            "args": ["captcha_images"]
+            "args": ["localhost", "9999", "model"]
+        },
+        {
+            "name": "2Captcha Training",
+            "type": "python",
+            "request": "launch",
+            "program": "2Captcha_training.py",
+            "console": "integratedTerminal"
+        },        
+        {
+            "name": "Copy",
+            "type": "python",
+            "request": "launch",
+            "program": "images_sample.py",
+            "console": "integratedTerminal",
+            "args": ["samples"]
         }
     ]
 }
