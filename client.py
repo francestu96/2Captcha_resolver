@@ -11,7 +11,7 @@ import time
 HOST = 'localhost'
 PORT = 9999
 LOG_DIR = './logs/'
-CAPTHCA_DIR = './capcha_images/'
+CAPTHCA_DIR = './2capcha_images/'
 
 BASE_URL = "https://2captcha.com/captcha3.php?client={0}&"
 GET_URL = BASE_URL + "action=get"
